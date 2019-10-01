@@ -3,7 +3,7 @@ import json
 import yaml
 import datetime
 
-config = yaml.load(open("config.yaml",'r'),Loader=yaml.Loader)
+config = yaml.load(open("config.yaml",'r'), Loader=yaml.Loader)
 
 def init_conexion():
     cliente = pymongo.MongoClient(config['Mongo']['Direccion'])
@@ -59,9 +59,17 @@ def precio_min_accion(id_accion, inicio_periodo, fin_periodo):
     documentos = consulta_general("Acciones", filtrado, impresion, "CostoAccion")
     return documentos.next()["CostoAccion"]
 
+def mejor_accion_empresa(nombre_empresa, fecha):
+    fecha_accion = datetime.datetime.strptime(fecha, "%Y-%M-%d")
+    filtrado = {"Empresa" : nombre_empresa, "Fecha":fecha_accion}
+    impresion = {"_id":0}
+    documentos = consulta_general("Acciones", filtrado, impresion, "CostoAccion", True)
+    return documentos.next()
+
 #inserta_documentos("Acciones", "acciones.jsonl")
 #inserta_documentos("Dividendos","dividendos.jsonl")
 
 print(precio_promedio_accion("PEME1","2015-01-01","2016-01-01"))
 print(precio_max_accion("PEME1","2015-01-01","2016-01-01"))
 print(precio_min_accion("PEME1","2015-01-01","2016-01-01"))
+print(mejor_accion_empresa("PEMEX","2016-05-20"))
