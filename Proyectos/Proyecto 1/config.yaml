@@ -1,0 +1,7 @@
+appName: ProyectoBDnR
+
+Mongo:
+  Direccion: "mongodb://localhost:27017"
+  Base : "test"
+  ColeccionAcciones: "pruebaacciones"
+  ColeccionDividendos : "pruebadividendos"
