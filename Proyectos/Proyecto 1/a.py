@@ -66,6 +66,17 @@ def mejor_accion_empresa(nombre_empresa, fecha):
     documentos = consulta_general("Acciones", filtrado, impresion, "CostoAccion", True)
     return documentos.next()
 
+def pago_total_dividendo(id_accion, inicio_periodo, fin_periodo):
+    acumulado = 0.0
+    fecha_inicio = datetime.datetime.strptime(inicio_periodo, "%Y-%M-%d")
+    fecha_fin = datetime.datetime.strptime(fin_periodo, "%Y-%M-%d")
+    filtrado = {"Id" : id_accion, "Fecha":{"$gte":fecha_inicio, "$lt":fecha_fin}}
+    impresion = {"_id":0, "Pago" : 1}
+    documentos = consulta_general("Dividendos", filtrado, impresion)
+    for documento in documentos:
+        acumulado += documento["Pago"]
+    return acumulado
+
 #inserta_documentos("Acciones", "acciones.jsonl")
 #inserta_documentos("Dividendos","dividendos.jsonl")
 
@@ -73,3 +84,4 @@ print(precio_promedio_accion("PEME1","2015-01-01","2016-01-01"))
 print(precio_max_accion("PEME1","2015-01-01","2016-01-01"))
 print(precio_min_accion("PEME1","2015-01-01","2016-01-01"))
 print(mejor_accion_empresa("PEMEX","2016-05-20"))
+print(pago_total_dividendo("PEME1","2015-01-01","2016-01-01"))
