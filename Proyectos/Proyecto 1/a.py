@@ -124,6 +124,18 @@ def grafica_costo_accion(id_accion, inicio_periodo, fin_periodo):
     pyplot.legend()
     pyplot.show()
 
+def grafica_pago_dividendos(ids_acciones, inicio_periodo, fin_periodo):
+    pagos = []
+    for id_accion in ids_acciones:
+        pagos.append(pago_total_dividendo(id_accion, inicio_periodo, fin_periodo))
+    pyplot.figure()
+    pyplot.title("Pago total de dividendos")
+    pyplot.xlabel("Acciones")
+    pyplot.ylabel("Pago total de dividendos en el periodo")
+    pyplot.bar(ids_acciones, pagos)
+    pyplot.show()
+
+
 #inserta_documentos("Acciones", "acciones.jsonl")
 #inserta_documentos("Dividendos","dividendos.jsonl")
 
@@ -133,3 +145,4 @@ print(precio_min_accion("PEME1","2015-01-01","2016-01-01"))
 print(mejor_accion_empresa("PEMEX","2016-05-20"))
 print(pago_total_dividendo("PEME1","2015-01-01","2016-01-01"))
 grafica_costo_accion("PEME1","2015-01-01","2016-01-01")
+grafica_pago_dividendos(["PEME1", "PEME5"],"2015-01-01","2016-01-01")
