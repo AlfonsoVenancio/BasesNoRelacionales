@@ -1,0 +1,34 @@
+Prueba de la instalación de la base de datos NoSQL: Cassandra
+1. Ejecutar el cqlsh: <Iniciar>, entrada DataStax Community Edition, entrada Cassandra SQL Shell, <Enter>
+2. Crear el keyspace (equivalente al create database de SQL):
+create keyspace prueba
+with replication = { 'class' : 'SimpleStrategy',
+	'replication_factor' : 3};
+
+3. Usar el keyspace:
+use prueba;
+
+4. Crear una tabla:
+create table usuarios (
+  nombre varchar,
+  passw  varchar,
+  estado varchar,
+  primary key (nombre));
+
+5. Insertar valores:
+insert into usuarios (nombre, passw, estado)
+	values ('Ana', 'Ana', 'CDMX');
+insert into usuarios (nombre, passw, estado)
+	values ('Beto', 'Beto', 'CDMX');
+insert into usuarios (nombre, passw, estado)
+	values ('Ceci', 'Ceci', 'EdoMex');
+
+6. Recuperar valores:
+select * from usuarios;
+
+7. Para recuperar valores usando un campo de la tabla hay que crear un índice:
+create index on usuarios(estado);
+
+8. Se pueden recuperar valores usando el campo estado:
+select * from usuarios where estado='CDMX';
+

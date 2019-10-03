@@ -1,0 +1,45 @@
+create keyspace examen1 
+with replication = { 'class' : 'SimpleStrategy',  'replication_factor' : 1}; 
+
+create table reservacion(
+	idRes int,
+	origenRes varchar,
+	ciudadOrigen varchar,
+	fechaEntrada timeStamp,
+	cDias int, 
+	gastoT decimal,
+	tipoHabitacion varchar,
+	primary key (idRes)
+);
+
+insert into examen1.reservacion(idRes,origenRes,ciudadOrigen,fechaEntrada,cDias,gastoT,tipoHabitacion) values
+(1,'internet','jal','2019-01-01',6,2000,'suite');
+insert into examen1.reservacion(idRes,origenRes,ciudadOrigen,fechaEntrada,cDias,gastoT,tipoHabitacion) values
+(2,'internet','mex','2019-02-01',6,2500,'unaR');
+insert into examen1.reservacion(idRes,origenRes,ciudadOrigen,fechaEntrada,cDias,gastoT,tipoHabitacion) values
+(3,'telefonica','col','2019-08-01',6,500,'unaR');
+insert into examen1.reservacion(idRes,origenRes,ciudadOrigen,fechaEntrada,cDias,gastoT,tipoHabitacion) values
+(4,'agencia','mor','2019-08-01',6,1500,'dosR');
+
+select * from examen1.reservacion;
+
+a)
+create index on reservacion(ciudadOrigen);
+create index on reservacion(cDias);
+create index on reservacion(gastoT);
+
+select ciudadOrigen from reservacion where cDias>5 and gastoT>1000 order by ciudadOrigen desc;
+//SALE ERROR DE EQUAL
+
+b)
+create index on reservacion(origenRes);
+
+select count(*) from reservacion where origenRes='internet';
+
+c)
+create index on reservacion(tipoHabitacion);
+create index on reservacion(fechaEntrada);
+
+select count(*) from reservacion where tipoHabitacion='unaR' and fechaEntrada>='2019-08-01' and fechaEntrada<'2019-09-01' 
+allow filtering;
+

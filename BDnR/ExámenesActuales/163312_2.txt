@@ -1,0 +1,65 @@
+
+
+
+PREGUNTA 2
+
+/*create keyspace examen2 with replication= {'class':'SimpleStrategy','replication_factor':1};
+use examen2;
+create table gastoClientesCiudad(
+	nombreCiudad text,
+	nombreCliente text,
+	estancia int,
+	gasto float,
+	primary key (nombreCiudad,estancia)
+);
+
+
+
+create table tipoReservacion(
+	tipoReservacion text,
+	nombreCliente text,
+	gastoCliente float,
+	fecha text,
+	primary key (tipoReservacion,nombreCliente)
+);
+
+create table ocupacionHabitacion(
+	fechaEntrada text,
+	tipoRec text,
+	nombreCliente,
+	primary key (fechaEntrada,tipoRec)
+);
+
+insert into gastoClientesCiudad(nombreCiudad,nombreCliente,estancia, gasto )
+values ('Guadalajara','Javier', 2, 200); 
+insert into gastoClientesCiudad(nombreCiudad,nombreCliente,estancia, gasto )
+values ('Guadalajara','Jimena', 7, 2200); 
+insert into gastoClientesCiudad(nombreCiudad,nombreCliente,estancia, gasto )
+values ('Guadalajara','Gabriel', 10, 2200); 
+
+insert into tipoReservacion(tipoReservacion, nombreCliente, gastoCliente, fecha )
+values ('agencia','Javier', 200, '29-09-16'); 
+insert into tipoReservacion(tipoReservacion, nombreCliente, gastoCliente, fecha )
+values ('agencia','Jimena', 200, '29-08-16'); 
+insert into tipoReservacion(tipoReservacion, nombreCliente, gastoCliente, fecha )
+values ('internet','Gabriel', 2200, '29-07-16'); 
+
+insert into ocupacionHabitacion(fechaEntrada, tipoRec,nombreCliente )
+values ('29-09-16','sencilla','Javier'); 
+insert into ocupacionHabitacion(fechaEntrada, tipoRec,nombreCliente )
+values ('29-08-16','doble','Jimena'); 
+insert into ocupacionHabitacion(fechaEntrada, tipoRec,nombreCliente )
+values ('29-07-16','sencilla','Gabriel'); 
+
+*/
+
+
+//select nombreCiudad, gasto from gastoClientesCiudad where nombreCiudad='Guadalajara' and estancia>= 5 ALLOW FILTERING;
+//select count (*) from tipoReservacion where tipoReservacion='agencia';
+//select count(*) from OcupacionHabitacion where fechaEntrada>='01-08-19' and fechaEntrada<='30-08-19' and tipoRecamara='sencilla' ALLOW FILTERING
+
+
+
+
+
+

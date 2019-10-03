@@ -1,0 +1,56 @@
+﻿drop table clienteEstancia;
+create table clienteEstancia(
+	claveCliente int,
+	gastosTot float,
+	ciudad varchar,
+	estancia int,
+	arrival timestamp,
+	departure timestamp,
+	primary key (claveCliente, estancia, gastosTot)
+	);
+
+
+create table tipoReservaciones(
+	claveCliente int,
+	gastosTot float,
+	tipoReser varchar,
+	cantRec int,
+	estancia int,
+	arrival timestamp,
+	departure timestamp,
+	primary key ((claveCliente, arrival), tipoReser)
+	);
+
+
+//index
+create index on tipoReservaciones(cantRec);
+
+insert into clienteEstancia(claveCliente, gastosTot, estancia, arrival, departure, ciudad) 
+	values (1,1500,6,'2019-08-12','2019-08-18', 'Berlin');
+insert into clienteEstancia(claveCliente, gastosTot, estancia, arrival, departure, ciudad) 
+	values (2,1100,2,'2019-09-12','2019-09-14', 'Amsterdam');
+insert into clienteEstancia(claveCliente, gastosTot, estancia, arrival, departure, ciudad) 
+	values (3,500,6,'2019-08-12','2019-08-18', 'New York');
+insert into clienteEstancia(claveCliente, gastosTot, estancia, arrival, departure, ciudad) 
+	values (4,1200,5,'2019-07-12','2019-07-17', 'Hong Kong');
+
+
+insert into tipoReservaciones(claveCliente, gastosTot, estancia, arrival, departure, tipoReser, cantRec) 
+	values (1,1500,6,'2019-08-12','2019-08-18', 'internet', 2);
+insert into tipoReservaciones(claveCliente, gastosTot, estancia, arrival, departure,tipoReser, cantRec) 
+	values (2,1100,2,'2019-09-12','2019-09-14', 'internet', 3);
+insert into tipoReservaciones(claveCliente, gastosTot, estancia, arrival, departure,tipoReser, cantRec) 
+	values (3,500,6,'2019-08-12','2019-08-18', 'agencia', 1);
+insert into tipoReservaciones(claveCliente, gastosTot, estancia, arrival, departure,tipoReser, cantRec) 
+	values (4,1200,5,'2019-07-12','2019-07-17', 'agencia', 5);
+
+a)
+select ciudad, gastosTot from clienteEstancia where estancia>5 and gastosTot>1000 ;
+
+b)
+select count(*) from tipoReservaciones where tipoReser='internet' allow filtering;
+
+c)
+select count(*) from tipoReservaciones 
+	where cantRec<3 
+	and arrival<'2019-09-01' and arrival > '2019-08-01';

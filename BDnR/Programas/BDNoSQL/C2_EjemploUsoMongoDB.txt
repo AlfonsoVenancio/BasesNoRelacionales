@@ -1,0 +1,119 @@
+
+2.5.1	Ejemplo de uso de MongoDB
+En esta sección se brinda un ejemplo de la creación, manipulación y consulta de una base de datos NoSQL empleando MongoDB.
+Se creará una colección de empleados y se irán mostrando las distintas variantes de las instrucciones que se pueden usar 
+para manipularla.
+
+1.	Abrir una terminal del sistema y ejecutar el motor de la base de datos (después de haber instalado el software) 
+	dando mongod.
+	Abrir otra terminal del sistema y dar: mongo.
+
+2.	Crear/usar la base de datos. Si la base no existe, se crea; si existe, se entra a su espacio:
+use ejemplo;
+
+3.	Crear una colección. En MongoDB no tiene que crearse un esquema de "tabla" explícito; simplemente se da el nombre 
+	de la colección y MongoDB se encarga de manejar internamente la estructura:
+db.createCollection("emp")
+
+4.	Insertar documentos (datos): simplemente se dan los datos en notación JSON (Java Script Object Notation).
+	Se pueden usar los métodos insertMany(…) o insertOne(…), de manera alterna, para insertar varios o un solo 
+	documento, respectivamente. En este caso ya no sería necesario usar save, siendo necesario guardar los documentos 
+	como un arreglo en el caso de usar el primer método:
+a= {depId: 1,
+    nomDep: "Compu",
+    emps: [
+	    { empId: 1, nomEmp: "Ana", apEmp: "Suarez" },
+	    { empId: 2, nomEmp: "Roberto", apEmp: "Campos" }
+    ]
+   };
+db.emp.save(a);
+
+a= {depId: 2,
+    nomDep: "Conta",
+    emps: [
+	    { empId: 3, nomEmp: "Cecilia", apEmp: "Campos" },
+	    { empId: 4, nomEmp: "David", apEmp: "Flores" }
+    ]
+   };
+db.emp.save(a);
+
+a= {depId: 3,
+    nomDep: "Admin",
+    emps: [
+	    { empId: 5, nomEmp: "Ana", apEmp: "Macedo" }
+	   ]
+   };
+db.emp.save(a);
+
+ 
+5.	Recuperar valores. A continuación se muestran las diversas alternativas que se tienen para consultar la 
+	información en la base de datos (importan mayúsculas y minúsculas):
+db.emp.find();			//Obtener todos los empleados.
+db.emp.find().pretty();		//Se ven más "legibles".
+
+//Muestra campos explícitos. El 1 es true; 0 es false.
+db.emp.find({},{emps:1});
+db.emp.find({},{emps:1,_id:0});		//Ídem, sin el _id.
+
+//Con una condición explícita.
+db.emp.find({depId:3},{nomDep:1});
+
+//Condición and.
+db.emp.find({depId:1,nomDep:"Compu"},{emps:1});
+
+//Condición or.
+db.emp.find({$or:[{depId:1},{depId:2}]},{emps:1});
+
+//Comparación: $gt, $gte, $lt, $lte, $ne
+db.emp.find({depId:{$gt:2}},{emps:1});
+db.emp.find({depId:{$gte:1,$lt:3}},{emps:1});
+
+//Equivalente a like "%n%" (de sql). Se emplea la notación de punto
+//para acceder a campos de un documento (hay que encerrar entre ").
+db.emp.find({"emps.nomEmp":/n/});
+
+//Equivalente a like "A%" (de sql).
+db.emp.find({"emps.nomEmp":/^A/});
+
+//Para ordenar ascendentemente (-1 para descendente).
+db.emp.find({},{nomDep:1}).sort({nomDep:1});
+
+//Otras.
+db.emp.find().limit(1);
+db.emp.find().count();
+db.emp.find({depId:1}).count();		//Cant. de veces que aparece el depto. 1.
+emps= db.emp;		//Para usar la colección "emp" con "emps".
+cemps.find({"emps.empID": {$in: [3,4]}})	//Empls. Con id=3 o 4.
+cemps.find({"emps.apEmp": "Campos"})
+
+//Para hacer agrupaciones.
+//En principio se pueden usar las funciones: $count y $sum.
+cemps.aggregate([{$group: {_id: "$nomDep",
+				   total: {$count: $"emps"}}},
+			 {$sort: {total: 1}}]);
+//Opcionalmente se podría usar $match (antes de $group), de una 
+//manera parecida al where (de sql): {$match: {depID: 1}}
+
+6.	Crear un índice sobre un campo:
+db.emp.createIndex({"emps.nomEmp":1});
+
+7.	Agregar un campo tipo fecha a la colección:
+db.emp.updateMany({ },{$set:{fechaInicio: new Date()}});
+
+8.	Insertar datos en el nuevo campo:
+db.emp.update({depId:1},{$set:{fechaInicio: "2018-01-01"}});
+
+9.	Agregar un campo tipo lista a la colección:
+db.emp.updateMany({ },{$set:{lugares: ["A","B"]}});
+
+10.	Borrar datos de un campo de un documento de una colección:
+db.emp.update({depId:1},{$set:{lugares:""}});
+
+11.	Borrar un campo de una colección:
+db.emp.updateMany({},{$unset:{lugares:""}});
+
+12.	Borrar documentos de una colección:
+db.emp.deleteMany({depId:1});
+
+
+

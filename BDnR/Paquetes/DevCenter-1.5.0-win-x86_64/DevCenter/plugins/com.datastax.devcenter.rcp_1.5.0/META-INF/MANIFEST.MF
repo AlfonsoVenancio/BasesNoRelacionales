@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Export-Package: com.datastax.devcenter.rcp.ui.jobs,com.datastax.devcen
+ ter.rcp.ui.models,com.datastax.devcenter.rcp.ui.validators,com.datast
+ ax.devcenter.rcp.webclient
+Bundle-ActivationPolicy: lazy
+Built-By: jenkins
+Eclipse-BundleShape: dir
+Bundle-Name: DataStax DevCenter RCP Application
+Bundle-Localization: plugin
+Created-By: Apache Maven 3.0.4
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui
+ .ide,org.eclipse.core.resources,org.eclipse.e4.ui.css.swt.theme,com.d
+ atastax.driver.core,com.datastax.devcenter.common,com.datastax.devcen
+ ter.ui,org.eclipse.core.commands,org.eclipse.core.databinding,org.ecl
+ ipse.core.databinding.property,org.apache.httpcomponents.httpclient;b
+ undle-version="4.3.6",org.apache.httpcomponents.httpcore;bundle-versi
+ on="4.3.3",com.google.guava
+Bundle-Vendor: DataStax
+Bundle-Version: 1.5.0
+Build-Jdk: 1.7.0_25
+Bundle-Activator: com.datastax.devcenter.rcp.RcpActivator
+Bundle-ManifestVersion: 2
+Import-Package: org.codehaus.jackson,org.codehaus.jackson.map,org.ecli
+ pse.core.databinding.beans,org.eclipse.jface.databinding.fieldassist,
+ org.eclipse.jface.databinding.swt
+Bundle-SymbolicName: com.datastax.devcenter.rcp;singleton:=true
+Archiver-Version: Plexus Archiver
+

@@ -1,0 +1,80 @@
+	
+Solución del ejercicio 2.1
+1) Creación de la tabla
+create table agencia (
+ marca varchar,
+ modelo varchar,
+ noSerie varchar,
+ anio int,
+ placa varchar,
+ color varchar,
+ tipo varchar,
+ servicios map<timestamp,text>,
+ costo map <timestamp,decimal>,
+primary key ((marca, modelo), noSerie));
+
+
+2) Inserción de datos iniciales
+
+insert into agencia (marca, modelo, noSerie, anio, placa, color, tipo)
+values ('vw', 'golf', '123A5678B', 2019, '789abc', 'rojo', 'deportivo');
+insert into agencia (marca, modelo, noSerie, anio, placa, color, tipo)
+values ('vw', 'jetta', '123B5678C', 2018, '123def', 'negro', 'equipado');
+insert into agencia (marca, modelo, noSerie, anio, placa, color, tipo)
+values ('nissan', 'sentra', '123456789', 2019, '123abc', 'blanco', 'equipado');
+insert into agencia (marca, modelo, noSerie, anio, placa, color, tipo)
+values ('nissan', 'versa', '12345678A', 2019, '456abc', 'blanco', 'deportivo');
+
+
+3) Inserción de datos de los servicios
+
+update agencia set servicios={'2019-01-02':'0 km'} where marca='vw' and modelo='golf' and noSerie='123A5678B';
+update agencia set servicios={'2018-01-02':'0 km'} where marca='vw' and modelo='jetta' and noSerie='123B5678C';
+update agencia set servicios= servicios+{'2019-01-02':'10000 kms'} where marca='vw' and modelo='jetta' and noSerie='123B5678C';
+
+update agencia set costo={'2019-01-02':2500} where marca='vw' and modelo='golf' and noSerie='123A5678B';
+update agencia set costo={'2018-01-02':2500} where marca='vw' and modelo='jetta' and noSerie='123B5678C';
+update agencia set costo=costo+{'2019-01-02':3500} where marca='vw' and modelo='jetta' and noSerie='123B5678C';
+
+==================================================
+
+Solución del ejercicio 2.2
+1) Creación de la tabla
+Versión 1: privilegiando el número de revisión
+create table wiki (
+titulo text,
+revision int,
+fecha timestamp,
+texto text,
+autor text,
+comentario text,
+primary key (titulo, revision))
+WITH CLUSTERING ORDER BY (revision DESC);
+
+
+Versión 2: privilegiando la fecha
+create table wiki (
+titulo text,
+revision int,
+fecha timestamp,
+texto text,
+autor text,
+comentario text,
+primary key (titulo, fecha))
+WITH CLUSTERING ORDER BY (fecha DESC);
+
+
+Versión 3: usando mapas para el autor y los comentarios:
+
+create table wiki (
+titulo varchar,
+revisión int,
+fecha timestamp,
+texto varchar,
+autor map<timestamp,text>,
+comentario map <timestamp,text>,
+primary key (titulo, fecha));
+WITH CLUSTERING ORDER BY (fecha DESC);
+
+
+

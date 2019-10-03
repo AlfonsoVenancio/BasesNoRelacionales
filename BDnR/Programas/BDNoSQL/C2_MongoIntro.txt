@@ -1,0 +1,37 @@
+//Introducción a MongoDB.
+
+	help
+	db.help()
+	show dbs		//Para mostrar las bd's existentes.
+	use prefs		//Para crear/usar una bd.
+
+	//Para insertar docs.
+	w={name:"John Doe", zip:10001};
+	x={name:"Lee Chang", zip:94129};
+	db.location.save(w);	//location es una colección (tabla).
+	db.location.save(x);
+
+	db.location.find();	//Para ver la colección. Comentar el _id
+
+	a={name:"Don Joe", zip:10001};
+	b={name:"John Doe", zip:94129};
+	db.location.save(a);
+	db.location.save(b);
+
+	db.location.find({zip:10001});	//Para buscar por un valor determinado.
+	db.location.find({name:"John Doe"});
+
+	c={name:"Lee Chang", zip:94129, add:"d1"};	//Comentar el cambio de
+	db.location.save(c);				//estructura "fácil".
+	db.location.find();
+
+	//Otras instrucciones:
+	var cursor=db.location.find();	//Se requiere var.
+	while (cursor.hasNext()) printjson(cursor.next());	//Imprime la colección.
+	
+	//Otras escrituras.
+	db.location.find().limit(2);
+	db.location.find().count();
+
+
+
