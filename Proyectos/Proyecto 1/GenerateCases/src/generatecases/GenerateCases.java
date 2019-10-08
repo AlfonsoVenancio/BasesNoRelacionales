@@ -1,10 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package generatecases;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,27 +7,17 @@ import java.time.LocalDate;
 import java.time.Month;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
-/**
- *
- * @author alfon
- */
-public class GenerateCases {
 
-    /**
-     * @param args the command line arguments
-     */
+public class GenerateCases {
     public static void main(String[] args) {
-        String[] empresas = {"PEMEX","BANAMEX","BIMBO","CEMEX","GRUMA"};
-        String[] tiposDeAcciones = {"ord","pre","pri"};
+        // Fecha inicial para generar los datos
         LocalDate fecha = LocalDate.of(2014, Month.SEPTEMBER, 1);
         try{
+            // Los dos objetos para escribir a los archivos
             FileWriter escritorAcciones = new FileWriter("acciones.jsonl");
-            
-            //BufferedWriter escritorAcciones = new BufferedWriter(archivoAcciones);
-            
             FileWriter escritorDividendos = new FileWriter("dividendos.jsonl");
-            //BufferedWriter escritorDividendos = new BufferedWriter(archivoDividendos);
             
+            // Arreglo de acciones de las que queremos generar datos
             Accion[] acciones = {
                 new Accion("PEMEX","ord",15000.0,0.15),
                 new Accion("BANAMEX","ord",23000.0,0.13),
@@ -50,7 +33,9 @@ public class GenerateCases {
                 new Accion("CEMEX","pre",23000.0,0.11)
             };
             
-            while(fecha.isBefore(LocalDate.of(2019, Month.OCTOBER, 1))){         
+            // Se generan los datos hasta el primero de octubre de 2019
+            while(fecha.isBefore(LocalDate.of(2019, Month.OCTOBER, 1))){
+                // Para cada una de las acciones, se hace una modificacion de su precio y se escribe el JSON al archivo correspondiente     
                 for(Accion accionHoy : acciones){
                     accionHoy.CambiaPrecioAccion();
                     escritorAcciones.write(accionHoy.toJSON().add("Fecha", fecha.toString()).build().toString() + "\n");
@@ -59,6 +44,7 @@ public class GenerateCases {
                     // Reparto de dividendos y compra/venta de acciones
                     // Al final del mes
                     for(Accion accionHoy : acciones){
+                        // Se obtienen el pago de dividendos de esta accion y se escribe el JSON al archivo
                         Double pagoDividendo = accionHoy.CostoAccion * accionHoy.PorcentajeDividendos;
                         String pago = Json.createObjectBuilder()
                                 .add("Id", accionHoy.Id)
@@ -67,17 +53,19 @@ public class GenerateCases {
                         escritorDividendos.write(pago + "\n");
                     }
                 }
+                // Siguiente dia
                 fecha = fecha.plusDays(1);
             }
             escritorAcciones.close();
             escritorDividendos.close();
         }catch(IOException e){
-            System.err.format("IOEcception: %s%n",e);
+            System.err.format("IOException: %s%n",e);
         }
     }
     
 }
 
+// lol
 class Accion{
     public static Integer IdAccion = 0;
     public String Id;
@@ -87,6 +75,7 @@ class Accion{
     public Double PorcentajeDividendos;
     
     public Accion(String Empresa, String TipoAccion, Double CostoAccion, Double PorcentajeDividendos){
+        // El Id de la accion son los primeros 4 caracteres del nombre de la ccion y un numero entero consecutivo entre todas las acciones
         this.Id = Empresa.substring(0, 4) + String.valueOf(++IdAccion);
         this.Empresa = Empresa;
         this.TipoAccion = TipoAccion;
@@ -94,11 +83,13 @@ class Accion{
         this.PorcentajeDividendos = PorcentajeDividendos;
     }
     
+    // Cada que se le quiere cambiar el precio a una accion, se le suma o resta aleatoriamente el 5% de su costo de ese dia
     public void CambiaPrecioAccion(){
         Random manoInvisible = new Random();
         this.CostoAccion += this.CostoAccion * ((manoInvisible.nextDouble() - 0.5) * 0.1);
     }
     
+    // Se agregan todos los miembros al JSON y se devuelve un JSONObjectBuilder para poder agregarle mas datos
     public JsonObjectBuilder toJSON(){
         return Json.createObjectBuilder()
                 .add("Id", Id).add("Empresa", Empresa)
